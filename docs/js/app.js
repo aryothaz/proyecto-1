@@ -6,6 +6,8 @@ jQuery(document).ready(function($){
 
 	function setearTema(){
 		if(checkCSS()){
+			$('.config-btn').removeClass('active');
+			$($("[dir='"+Storage.getTema()+"']")).addClass('active');
 			changeCSS(Storage.getTema());
 		}
 	}
@@ -19,6 +21,7 @@ jQuery(document).ready(function($){
 		$('#autos').replaceWith($.parseHTML(nivel.autos.crearAutos()));
 		$('#clases-input').val(Storage.getRespuesta(nivel.numero));
 		actualizarElementos();
+		$('#clases-input').trigger('keyup');
 	}
 
 	function setearGanador(){
@@ -122,9 +125,13 @@ jQuery(document).ready(function($){
 
     createPopoverMenu().click(function(){
     	$(this).popover('show');
-    });    
+    });
+	
+    $(document).on('cambio-nivel', function(){
+	Storage.refreshStorage(nivel.numero, $('#css-style').attr('href'), $('#clases-input').val());
+    });
 
     $(window).on("beforeunload", function(){
     	Storage.refreshStorage(nivel.numero, $('#css-style').attr('href'), $('#clases-input').val());
-	});
+    });
 });
